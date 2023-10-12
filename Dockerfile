@@ -4,6 +4,15 @@ FROM php:7.4-apache as php7.4
 # Set environment variables for MySQL
 RUN apt-get update
 # Install required PHP extensions
+# Database	On	On	
+# GD	Off	On	
+# cURL	On	On	
+# OpenSSL	On	On	
+# ZLIB	On	On	
+# ZIP
+RUN apt-get install -y libpng-dev libjpeg-dev libfreetype6-dev libzip-dev libcurl4-openssl-dev libssl-dev
+RUN docker-php-ext-install mysqli pdo pdo_mysql gd curl zip
+
 
 
 # Enable Apache modules
@@ -13,20 +22,7 @@ RUN a2enmod rewrite
 WORKDIR /var/www/html
 
 # Download and extract OpenCart
-ADD https://github.com/opencart/opencart/archive/3.0.3.8.zip /var/www/html/
 
-RUN apt-get update && \
-    apt-get install -y unzip && \
-    unzip 3.0.3.8.zip && \
-    rm 3.0.3.8.zip && \
-    mv opencart-3.0.3.8/upload/* . && \
-    rm -rf opencart-3.0.3.8
-
-# change config-dist.php to config and set permissions for config files
-RUN mv config-dist.php config.php && \
-    mv admin/config-dist.php admin/config.php && \
-    chmod 755 config.php && \
-    chmod 755 admin/config.php
 
 
 # Expose port 80 for Apache
