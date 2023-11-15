@@ -1,5 +1,5 @@
 # Use an official PHP image as the base image
-FROM php:7.4-apache as php7.4
+FROM php:7.4-alpine as php7.4
 
 # Set environment variables for MySQL
 RUN apt-get update
